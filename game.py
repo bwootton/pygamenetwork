@@ -29,8 +29,7 @@ def play_game(my_port, other_port):
 
 
     # Set up the drawing window
-    screen = pygame.display.set_mode([500, 500])
-
+    screen = pygame.display.set_mode([1800, 1000])
     # Run until the user asks to quit
     running = True
 
@@ -60,7 +59,8 @@ def play_game(my_port, other_port):
                     circle.move_x(10)
                 elif event.key == pygame.K_LEFT:
                     circle.move_x(-10)
-
+            if event.type == pygame.MOUSEMOTION:
+                mouseposition = pygame.mouse.get_pos()
 
         # handle any new messages
         for message in message_channel.get_message_list():
@@ -90,6 +90,15 @@ class Circle(object):
 
     def move_y(self, distance):
         self.y = self.y + distance
+        self.redraw()
+
+    def move_absolute(self, x, y):
+        """
+        Move to absolute position x,y
+
+        """
+        self.x = x
+        self.y = y
         self.redraw()
 
     def redraw(self):
