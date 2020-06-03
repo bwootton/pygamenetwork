@@ -61,6 +61,12 @@ def play_game(my_port, other_port):
                     circle.move_x(-10)
             if event.type == pygame.MOUSEMOTION:
                 mouseposition = pygame.mouse.get_pos()
+                circle.move_absolute(mouseposition[0],mouseposition[1])
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                circle.get_big()
+            if event.type == pygame.MOUSEBUTTONUP:
+                circle.get_small()
+
 
         # handle any new messages
         for message in message_channel.get_message_list():
@@ -83,6 +89,7 @@ class Circle(object):
         self.y = 250
         self.old_y = 250
         self.screen = screen
+        self.rad = 10
 
     def move_x(self, distance):
         self.x = self.x + distance
@@ -101,11 +108,23 @@ class Circle(object):
         self.y = y
         self.redraw()
 
+    def get_big(self):
+        self.rad = 50
+        self.redraw()
+    def get_small(self):
+        self.erase()
+        self.rad = 10
+        self.redraw()
+
     def redraw(self):
-        pygame.draw.circle(self.screen, (255, 255, 255), (self.old_x, self.old_y), 10)
+        # erase old circle
+        pygame.draw.circle(self.screen, (255, 255, 255), (self.old_x, self.old_y), self.rad)
         self.old_x = self.x
         self.old_y = self.y
-        pygame.draw.circle(self.screen, (0, 0, 255), (self.x, self.y), 10)
+        # draw new circle
+        pygame.draw.circle(self.screen, (0, 0, 255), (self.x, self.y), self.rad)
+    def erase(self):
+        pygame.draw.circle(self.screen, (255, 255, 255), (self.old_x, self.old_y), self.rad)
 
 def erase_circle(x, y , screen):
     pygame.draw.circle(screen, (255, 255,255), (x, y), 10)
